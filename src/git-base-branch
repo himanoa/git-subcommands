@@ -1,0 +1,21 @@
+#!/usr/bin/env python
+
+from argparse import ArgumentParser
+import os
+def parser():
+    usage = 'Usage: git base-branch [-a <branch_name>]'
+    argparser = ArgumentParser(usage=usage)
+    argparser.add_argument('-a', '--add', type=str,
+                           dest='branch_name',
+                           help='set base branch')
+    args = argparser.parse_args()
+    if args.branch_name:
+       with open("BASE_BRANCH", "w") as f:
+           f.write(args.branch_name)
+           return
+    with open("BASE_BRANCH", "r") as f:
+        print(f.read(), end="")
+
+if __name__ == '__main__':
+    parser()
+

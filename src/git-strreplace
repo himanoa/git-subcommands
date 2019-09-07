@@ -1,0 +1,60 @@
+#!/usr/bin/env python
+
+'''
+## Example
+    $ cat foobar.txt
+    poepoe
+    $ git grep popeoe
+    foobar.txt
+    $ git replace poepoe himanoa
+
+    $ cat foobar.txt
+    himanoa
+'''
+
+BLACK     = '\033[30m'
+RED       = '\033[31m'
+GREEN     = '\033[32m'
+YELLOW    = '\033[33m'
+BLUE      = '\033[34m'
+PURPLE    = '\033[35m'
+CYAN      = '\033[36m'
+WHITE     = '\033[37m'
+END       = '\033[0m'
+BOLD      = '\038[1m'
+UNDERLINE = '\033[4m'
+INVISIBLE = '\033[08m'
+REVERCE   = '\033[07m'
+
+from argparse import ArgumentParser
+from subprocess import check_output
+import os
+
+def execute():
+    try:
+        usage = 'Usage: git strreplace <sub_string> <replacement_string>'
+        argparser = ArgumentParser(usage=usage)
+        argparser.add_argument('sub_string',
+            help='sub_string',
+            type=str,
+        )
+        argparser.add_argument(
+            'replacement_string',
+            help='replacement_string',
+            type=str,
+        )
+        args = argparser.parse_args()
+
+        replace_target = check_output(['git', 'grep', '-l', args.sub_string]).decode('utf-8').split('\n')[:-1:]
+        for t in replace_target:
+            with  open(t, "r") as f:
+                file_body = f.read().replace(args.sub_string, args.replacement_string)
+            with open(t, "w") as f:
+                f.write(file_body)
+
+    except:
+        print('asd')
+
+if __name__ == '__main__':
+    execute()
+

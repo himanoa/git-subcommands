@@ -48,7 +48,6 @@ def execute():
             type=str,
         )
         args = argparser.parse_args()
-        print(vars(args))
 
         options = ['-l']
         if args.word_regexp:

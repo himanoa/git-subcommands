@@ -1,0 +1,40 @@
+#!/usr/bin/env python
+
+from re import compile, match
+from subprocess import check_output
+
+'''
+## Example
+
+```
+$ git checkout -b foobar
+$ git checkout -b poepoe
+$ git checkout master
+$ git chistory
+foobar
+poepoe
+master
+```
+'''
+
+REFLOG_REGEX = compile(
+    '[a-z0-9]{7} HEAD@\{[1-9][0-9]*\}: checkout: moving from (.+) to (.+)'
+)
+
+
+def parse_checkout_reflog(reflogs):
+    def parse_ref(line):
+        matched = REFLOG_REGEX.match(line)
+        return {"from": matched[1], "to": matched[2]}
+    return [parse_ref(reflog) for reflog in reflogs]
+
+
+if __name__ == "__main__":
+    reflog = [
+        x for x in check_output(['git', 'reflog'])
+        .decode('utf-8').split('\n')[:-1:]
+        if REFLOG_REGEX.match(x)
+    ]
+    parsed = parse_checkout_reflog(reflog)
+    for log in parsed:
+        print(log.get("to"))

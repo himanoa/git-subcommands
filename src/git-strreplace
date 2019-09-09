@@ -13,6 +13,8 @@
     himanoa
 '''
 
+import re
+
 BLACK     = '\033[30m'
 RED       = '\033[31m'
 GREEN     = '\033[32m'
@@ -33,8 +35,9 @@ import os
 
 def execute():
     try:
-        usage = 'Usage: git strreplace <sub_string> <replacement_string>'
+        usage = 'Usage: git strreplace [-w] <sub_string> <replacement_string>'
         argparser = ArgumentParser(usage=usage)
+        argparser.add_argument('-w', '--word-regexp', action='store_true')
         argparser.add_argument('sub_string',
             help='sub_string',
             type=str,
@@ -45,11 +48,20 @@ def execute():
             type=str,
         )
         args = argparser.parse_args()
+        print(vars(args))
 
-        replace_target = check_output(['git', 'grep', '-l', args.sub_string]).decode('utf-8').split('\n')[:-1:]
+        options = ['-l']
+        if args.word_regexp:
+            options.append('-w')
+
+        replace_target = check_output(['git', 'grep'] + options + [args.sub_string]).decode('utf-8').split('\n')[:-1:]
         for t in replace_target:
             with  open(t, "r") as f:
-                file_body = f.read().replace(args.sub_string, args.replacement_string)
+                if args.word_regexp:
+                    pattern = r"\b" + re.escape(args.sub_string) + r"\b"
+                else:
+                    pattern = re.escape(args.sub_string)
+                file_body = re.sub(pattern, args.replacement_string, f.read())
             with open(t, "w") as f:
                 f.write(file_body)
 

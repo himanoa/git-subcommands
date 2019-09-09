@@ -6,7 +6,8 @@
     poepoe
     $ git grep popeoe
     foobar.txt
-    $ git replace poepoe himanoa
+    
+    $ git strreplace poepoe himanoa
 
     $ cat foobar.txt
     himanoa

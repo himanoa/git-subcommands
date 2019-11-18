@@ -13,8 +13,11 @@ def parser():
        with open("BASE_BRANCH", "w") as f:
            f.write(args.branch_name)
            return
-    with open("BASE_BRANCH", "r") as f:
-        print(f.read(), end="")
+    try:
+        with open("BASE_BRANCH", "r") as f:
+            print(f.read(), end="")
+    except:
+        print("master", end="")
 
 if __name__ == '__main__':
     parser()

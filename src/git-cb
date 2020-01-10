@@ -31,7 +31,7 @@ def current_branch():
 
 
 if __name__ == "__main__":
-    usage = 'Usage: git cb <bramch_name>'
+    usage = 'Usage: git cb <branch_name>'
     argparser = ArgumentParser(usage=usage)
     argparser.add_argument('branch_name', help='create branch name', type=str)
     args = argparser.parse_args()

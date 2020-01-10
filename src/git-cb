@@ -1,0 +1,48 @@
+#!/usr/bin/env python
+
+from subprocess import check_output
+from argparse import ArgumentParser
+
+'''
+## Example
+
+```
+$ git symbolic-ref --short HEAD
+foobar
+$ git cb poepoe
+foobar/poepoe
+
+### if current branch name === BASE_BRANCH
+$ git cb poepoe
+$ git symbolic-ref --short HEAD
+poepoe
+```
+'''
+
+
+def base_branch():
+    check_output(['git', 'base-branch'])
+
+
+def current_branch():
+    return check_output(
+            ['git', 'symbolic-ref', '--short', 'HEAD']
+    ).decode('utf-8').strip()
+
+
+if __name__ == "__main__":
+    usage = 'Usage: git cb <bramch_name>'
+    argparser = ArgumentParser(usage=usage)
+    argparser.add_argument('branch_name', help='create branch name', type=str)
+    args = argparser.parse_args()
+
+    new_branch_name = args.branch_name
+    if current_branch() == base_branch():
+        check_output(['git', 'checkout', '-b', new_branch_name])
+    else:
+        check_output(
+            ['git', 'checkout', '-b', "{0}__{1}".format(
+                current_branch(),
+                new_branch_name
+            )]
+        )

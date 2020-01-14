@@ -18,7 +18,7 @@ master
 '''
 
 REFLOG_REGEX = compile(
-    '[a-z0-9]{7} HEAD@\{[1-9][0-9]*\}: checkout: moving from (.+) to (.+)'
+    '[a-z0-9]{9} HEAD@\{[1-9][0-9]*\}: checkout: moving from (.+) to (.+)'
 )
 
 

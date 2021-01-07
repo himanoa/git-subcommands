@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+
+
+usage()
+{
+  echo "Usage: git use-template [-h] template_name"
+  exit 2
+}
+
+use_template() {
+  local temp_dir
+  temp_dir=$(mktemp -d)
+  git clone "$1" "$temp_dir"
+  rm -rf "$temp_dir"/.git
+  mv "$temp_dir"/* .
+  rm -rf "$temp_dir"
+  exit 0
+}
+
+while :
+do
+  case $1 in
+    "-h" | "--help" | "" ) usage shift ;;
+    * ) use_template "$@" ;;
+  esac
+done

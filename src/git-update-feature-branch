@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+echo "feature-branch: $1"
+echo "base-branch: $2"
+
+git checkout $2
+git pull origin $2
+git checkout $1
+git branch -D update-$1
+git checkout -b update-$1
+git merge $2
+git push origin $1 && gh pr create --title "update $1" --body "update $1"
+

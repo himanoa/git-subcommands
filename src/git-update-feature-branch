@@ -9,5 +9,5 @@ git checkout $1
 git branch -D update-$1
 git checkout -b update-$1
 git merge $2
-git push origin $1 && gh pr create --title "update $1" --body "update $1"
+git push origin update-$1 && gh pr create --title "update $1" --body "update $1" --base $1
 

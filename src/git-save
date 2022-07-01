@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+wip_commit=$(git log --grep="doing:" -n1 --format=%H)
+git commit --fixup "$wip_commit"
+git rebase --autosquash "$wip_commit"
